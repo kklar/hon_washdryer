@@ -170,7 +170,268 @@ class HonWashDryerRemoteControl(BinarySensorEntity, HonWashDryerEntity):
         self._attr_is_on = json["remoteCtrValid"]["parNewVal"] == 1
         self.async_write_ha_state()
 
-# KKLAR TEST OF WEIGHT 
+# KKLAR TEST
+class HonWashDryerMachineCurrentElectricityUsed(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_current_electricity_used"
+        self._attr_name = f"{self._name} Current Electricity Used"
+        self._attr_native_unit_of_measurement = ENERGY_KILO_WATT_HOUR
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_icon = "mdi:lightning-bolt"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = json["currentElectricityUsed"]["parNewVal"]
+        
+        self.async_write_ha_state()
+
+class HonWashDryerMachineCurrentWaterUsed(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_current_water_used"
+        self._attr_name = f"{self._name} Current Water Used"
+        self._attr_native_unit_of_measurement = VOLUME_LITERS
+        self._attr_device_class = SensorDeviceClass.VOLUME
+        self._attr_icon = "mdi:water"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = json["currentWaterUsed"]["parNewVal"]
+        
+        self.async_write_ha_state()
+
+class HonWashDryerMachineError(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_error"
+        self._attr_name = f"{self._name} Error"
+        self._attr_icon = "mdi:math-log"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        error = json["errors"]["parNewVal"]
+
+        if error in WASHING_MACHINE_ERROR_CODES:
+            self._attr_native_value = WASHING_MACHINE_ERROR_CODES[error]
+        else:
+            self._attr_native_value = f"Unkwon error {error}"
+        
+        self.async_write_ha_state()
+
+class HonWashDryerMachineLastStatus(BinarySensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_machine_last_status"
+        self._attr_name = f"{self._name} Machine Last Status"
+        self._attr_device_class = BinarySensorDeviceClass.POWER
+        self._attr_icon = "mdi:information"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_is_on = json["category"] == "CONNECTED"
+        
+        self.async_write_ha_state()
+
+
+class HonWashDryerMachineSpinSpeed(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_spin_Speed"
+        self._attr_name = f"{self._name} Spin speed"
+        self._attr_icon = "mdi:speedometer"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        if json["machMode"]["parNewVal"] in ("1","6"):
+            self._attr_native_value = 0
+        else:
+            self._attr_native_value = int(json["spinSpeed"]["parNewVal"])
+
+        self.async_write_ha_state()
+
+
+class HonWashDryerMachineTemp(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_temp"
+        self._attr_name = f"{self._name} Temperature"
+        self._attr_native_unit_of_measurement = TEMP_CELSIUS
+        self._attr_device_class = SensorDeviceClass.TEMPERATURE
+        self._attr_icon = "mdi:thermometer"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        if json["machMode"]["parNewVal"] in ("1","6"):
+            self._attr_native_value = 0
+        else:
+            self._attr_native_value = int(json["temp"]["parNewVal"])
+
+        self.async_write_ha_state()
+
+class HonWashDryerMeanWaterConsumption(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_mean_water_consumption"
+        self._attr_name = f"{self._name} Mean Water Consumption"
+        self._attr_native_unit_of_measurement = VOLUME_LITERS
+        self._attr_device_class = SensorDeviceClass.VOLUME
+        self._attr_icon = "mdi:water-sync"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        if int(json["totalWashCycle"]["parNewVal"])-1 == 0:
+            self._attr_native_value = None
+        else:
+            self._attr_native_value = round(float(json["totalWaterUsed"]["parNewVal"])/(float(json["totalWashCycle"]["parNewVal"])-1),2)
+
+        self.async_write_ha_state()
+
+class HonWashDryerMachineTotalElectricityUsed(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_total_electricity_used"
+        self._attr_name = f"{self._name} Total Electricity Used"
+        self._attr_native_unit_of_measurement = ENERGY_KILO_WATT_HOUR
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_icon = "mdi:connection"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = float(json["totalElectricityUsed"]["parNewVal"])
+        
+        self.async_write_ha_state()
+
+class HonWashDryerMachineTotalWashCycle(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_total_wash_cycle"
+        self._attr_name = f"{self._name} Total Wash Cycle"
+        self._attr_icon = "mdi:counter"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = int(json["totalWashCycle"]["parNewVal"])-1
+        
+        self.async_write_ha_state()
+
+class HonWashDryerMachineTotalWaterUsed(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_total_water_used"
+        self._attr_name = f"{self._name} Total Water Used"
+        self._attr_native_unit_of_measurement = VOLUME_LITERS
+        self._attr_device_class = SensorDeviceClass.VOLUME
+        self._attr_icon = "mdi:water-pump"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = float(json["totalWaterUsed"]["parNewVal"])
+        
+        self.async_write_ha_state()
+
+
+
 class HonWashDryerMachineWeight(SensorEntity, HonWashDryerEntity):
     def __init__(self, hass, coordinator, entry, appliance) -> None:
         super().__init__(hass, entry, coordinator, appliance)
