@@ -138,6 +138,16 @@ class HonWashDryerTimeRemaining(SensorEntity, HonWashDryerEntity):
                 "JSON": self._coordinator.data,
                 "TEST": "Hello world!",
         }
+        
+        @property
+        def extra_state_attributes(self):
+            """Return state attributes."""
+            attributes = {
+                "JSON": self._coordinator.data,
+                "TEST": "Hello world!",
+            }
+
+        return attributes
 
     @callback
     def _handle_coordinator_update(self):
