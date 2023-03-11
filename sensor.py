@@ -56,6 +56,16 @@ from .washdryer import (
     HonWashDryerMode, 
     HonWashDryerTimeRemaining, 
     HonWashDryerRemoteControl,
+    HonWashDryerMachineCurrentElectricityUsed,
+    HonWashDryerMachineCurrentWaterUsed,
+    HonWashDryerMachineError,
+    HonWashDryerMachineLastStatus,
+    HonWashDryerMeanWaterConsumption,
+    HonWashDryerMachineSpinSpeed,
+    HonWashDryerMachineTemp,
+    HonWashDryerMachineTotalElectricityUsed,
+    HonWashDryerMachineTotalWashCycle,
+    HonWashDryerMachineTotalWaterUsed,
     HonWashDryerMachineWeight
 )
 from .tumble_dryer import (
@@ -126,6 +136,16 @@ async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities) -> Non
                     HonWashDryerTimeRemaining(hass, coordinator, entry, appliance),
                     HonWashDryerMode(hass, coordinator, entry, appliance),
                     HonWashDryerRemoteControl(hass, coordinator, entry, appliance),
+		    HonWashDryerMachineCurrentElectricityUsed(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineCurrentWaterUsed(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineError(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineLastStatus(hass, coordinator, entry, appliance),
+                    HonWashDryerMeanWaterConsumption(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineSpinSpeed(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineTemp(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineTotalElectricityUsed(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineTotalWashCycle(hass, coordinator, entry, appliance),
+                    HonWashDryerMachineTotalWaterUsed(hass, coordinator, entry, appliance),
 		    HonWashDryerMachineWeight(hass, coordinator, entry, appliance),
                 ]
             )
