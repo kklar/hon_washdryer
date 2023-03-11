@@ -16,7 +16,6 @@ from homeassistant.components.binary_sensor import (
 
 from homeassistant.components.text import (
     TextEntity,
-    TextDeviceClass,
 )
 
 
