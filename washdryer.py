@@ -456,3 +456,28 @@ class HonWashDryerMachineWeight(SensorEntity, HonWashDryerEntity):
         self._attr_native_value = float(json["actualWeight"]["parNewVal"])
         
         self.async_write_ha_state()        
+
+        
+ class HonWashDryerJSON(SensorEntity, HonWashDryerEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_JSON"
+        self._attr_name = f"{self._name} json"
+        self._attr_icon = "mdi:washing-machine"
+
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = json
+
+
+        self.async_write_ha_state()
