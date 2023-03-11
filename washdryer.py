@@ -14,6 +14,12 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
 )
 
+from homeassistant.components.text import (
+    TextEntity,
+    TextDeviceClass,
+)
+
+
 from homeassistant.const import (
     TIME_MINUTES,
     ENERGY_KILO_WATT_HOUR,
@@ -458,7 +464,7 @@ class HonWashDryerMachineWeight(SensorEntity, HonWashDryerEntity):
         self.async_write_ha_state()        
 
         
- class HonWashDryerJSON(SensorEntity, HonWashDryerEntity):
+ class HonWashDryerJSON(TextEntity, HonWashDryerEntity):
     def __init__(self, hass, coordinator, entry, appliance) -> None:
         super().__init__(hass, entry, coordinator, appliance)
 
