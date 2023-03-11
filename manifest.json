@@ -1,6 +1,6 @@
 {
-  "domain": "hon1",
-  "name": "hOn1",
+  "domain": "hon",
+  "name": "hOn",
   "config_flow": true,
   "version": "0.0.5",
   "codeowners": ["@gvigroux","@MiguelAngelLV"],
