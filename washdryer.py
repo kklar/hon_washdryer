@@ -157,19 +157,6 @@ class HonWashDryerRemoteControl(BinarySensorEntity, HonWashDryerEntity):
         self._attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
         self._attr_icon = "mdi:remote"
 
-# KKLAR TEST OF WEIGHT 
-class HonWashDryerMachineWeight(SensorEntity, HonWashingMachineEntity):
-    def __init__(self, hass, coordinator, entry, appliance) -> None:
-        super().__init__(hass, entry, coordinator, appliance)
-
-        self._coordinator = coordinator
-        self._attr_unique_id = f"{self._mac}_weight"
-        self._attr_name = f"{self._name} Estimated Weight"
-        self._attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
-        self._attr_device_class = SensorDeviceClass.WEIGHT
-        self._attr_icon = "mdi:weight-kilogram"        
-
-
     @callback
     def _handle_coordinator_update(self):
 
@@ -182,3 +169,29 @@ class HonWashDryerMachineWeight(SensorEntity, HonWashingMachineEntity):
 
         self._attr_is_on = json["remoteCtrValid"]["parNewVal"] == 1
         self.async_write_ha_state()
+
+# KKLAR TEST OF WEIGHT 
+class HonWashDryerMachineWeight(SensorEntity, HonWashingMachineEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_weight"
+        self._attr_name = f"{self._name} Estimated Weight"
+        self._attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
+        self._attr_device_class = SensorDeviceClass.WEIGHT
+        self._attr_icon = "mdi:weight-kilogram"        
+        
+    @callback
+    def _handle_coordinator_update(self):
+
+        # Get state from the cloud
+        json = self._coordinator.data
+
+        # No data returned by the Get State method (unauthorized...)
+        if json is False:
+            return
+
+        self._attr_native_value = float(json["actualWeight"]["parNewVal"])
+        
+        self.async_write_ha_state()        
