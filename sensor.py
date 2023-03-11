@@ -55,7 +55,8 @@ from .washdryer import (
     HonWashDryerEntity, 
     HonWashDryerMode, 
     HonWashDryerTimeRemaining, 
-    HonWashDryerRemoteControl
+    HonWashDryerRemoteControl,
+    HonWashDryerMachineWeight
 )
 from .tumble_dryer import (
     HonTumbleDryerCoordinator, 
