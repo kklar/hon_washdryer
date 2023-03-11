@@ -14,6 +14,14 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
 )
 
+from homeassistant.const import (
+    TIME_MINUTES,
+    ENERGY_KILO_WATT_HOUR,
+    TEMP_CELSIUS, 
+    VOLUME_LITERS,
+    UnitOfMass
+)
+
 from homeassistant.const import TIME_MINUTES
 from homeassistant.core import callback
 
@@ -148,6 +156,19 @@ class HonWashDryerRemoteControl(BinarySensorEntity, HonWashDryerEntity):
         self._attr_name = f"{self._name} Remote Control"
         self._attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
         self._attr_icon = "mdi:remote"
+
+# KKLAR TEST OF WEIGHT 
+class HonWashDryerMachineWeight(SensorEntity, HonWashingMachineEntity):
+    def __init__(self, hass, coordinator, entry, appliance) -> None:
+        super().__init__(hass, entry, coordinator, appliance)
+
+        self._coordinator = coordinator
+        self._attr_unique_id = f"{self._mac}_weight"
+        self._attr_name = f"{self._name} Estimated Weight"
+        self._attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
+        self._attr_device_class = SensorDeviceClass.WEIGHT
+        self._attr_icon = "mdi:weight-kilogram"        
+
 
     @callback
     def _handle_coordinator_update(self):
