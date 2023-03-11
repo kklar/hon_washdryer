@@ -66,7 +66,8 @@ from .washdryer import (
     HonWashDryerMachineTotalElectricityUsed,
     HonWashDryerMachineTotalWashCycle,
     HonWashDryerMachineTotalWaterUsed,
-    HonWashDryerMachineWeight
+    HonWashDryerMachineWeight,
+    HonWashDryerJSON
 )
 from .tumble_dryer import (
     HonTumbleDryerCoordinator, 
@@ -147,6 +148,7 @@ async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities) -> Non
                     HonWashDryerMachineTotalWashCycle(hass, coordinator, entry, appliance),
                     HonWashDryerMachineTotalWaterUsed(hass, coordinator, entry, appliance),
 		    HonWashDryerMachineWeight(hass, coordinator, entry, appliance),
+		    HonWashDryerJSON(hass, coordinator, entry, appliance),
                 ]
             )
 
