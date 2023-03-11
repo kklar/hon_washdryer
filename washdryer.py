@@ -136,6 +136,7 @@ class HonWashDryerTimeRemaining(SensorEntity, HonWashDryerEntity):
         
         self._attr_extra_state_attributes = {
                 "JSON": self._coordinator.data,
+                "TEST": "Hello world!",
         }
 
     @callback
