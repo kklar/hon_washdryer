@@ -132,6 +132,10 @@ class HonWashDryerTimeRemaining(SensorEntity, HonWashDryerEntity):
         self._attr_native_unit_of_measurement = TIME_MINUTES
         self._attr_device_class = SensorDeviceClass.DURATION
         self._attr_icon = "mdi:progress-clock"
+        
+        self._attr_extra_state_attributes = {
+                "JSON": self._coordinator.data,
+        }
 
     @callback
     def _handle_coordinator_update(self):
