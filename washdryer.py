@@ -171,7 +171,7 @@ class HonWashDryerRemoteControl(BinarySensorEntity, HonWashDryerEntity):
         self.async_write_ha_state()
 
 # KKLAR TEST OF WEIGHT 
-class HonWashDryerMachineWeight(SensorEntity, HonWashingMachineEntity):
+class HonWashDryerMachineWeight(SensorEntity, HonWashDryerEntity):
     def __init__(self, hass, coordinator, entry, appliance) -> None:
         super().__init__(hass, entry, coordinator, appliance)
 
