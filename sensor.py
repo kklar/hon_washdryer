@@ -126,6 +126,7 @@ async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities) -> Non
                     HonWashDryerTimeRemaining(hass, coordinator, entry, appliance),
                     HonWashDryerMode(hass, coordinator, entry, appliance),
                     HonWashDryerRemoteControl(hass, coordinator, entry, appliance),
+		    HonWashDryerMachineWeight(hass, coordinator, entry, appliance),
                 ]
             )
 
